@@ -1,0 +1,31 @@
+Template: dn-xbindkeys/install-launcher
+Type: select
+Choices: Yes, No
+Default: Yes
+Description: Automatically install XBindKeys desktop launcher script?
+ This package can install a desktop file for each user with a desktop
+ autostart directory -- all executables in this directory are started
+ when the user starts their desktop. The desktop file will start XBindKeys
+ each time the user starts their desktop, i.e., logs in to KDE or Gnome.
+ .
+ A launcher script can be removed manually at any time. For each user
+ it is located at <${HOME}/.config/autostart/@pkg@.desktop>.
+ .
+ To find all instances of the launcher script on a system, use:
+ 	find /home/*/.config/autostart/ -name '@pkg@.desktop'
+
+Template: dn-xbindkeys/handle-existing-configs
+Type: select
+Choices: Backup, Overwrite
+Default: Backup
+Description: How to handle existing local XBindKeys configuration files?
+ This package installs a local XBindKeys configuration file in each user's
+ home directory ('~/.xbindkeysrc').
+ .
+ If there is an existing configuration file (not symlink) in a user's home
+ directory it can be overwritten or backed up. The most conservative
+ option ('Backup') has been selected as the default but on many systems
+ the 'Overwrite' option can be safely selected. If the XBindKeys
+ configuration is handled centrally or if the machine is single-user then
+ 'Overwrite' will be the preferred option.
+

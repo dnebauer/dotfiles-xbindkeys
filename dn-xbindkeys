@@ -1,0 +1,196 @@
+#!/usr/bin/perl 
+
+use Moo;    #                                                          {{{1
+use strictures 2;
+use 5.014_002;
+use version; our $VERSION = qv('0.1');
+use namespace::clean;    #                                             }}}1
+
+{
+
+    package Dn::Internal;
+
+    use Moo;                                                         # {{{1
+    use strictures 2;
+    use namespace::clean -except => [ '_options_data', '_options_config' ];
+    use Dn::Common;
+    use Function::Parameters;
+    use Getopt::Long::Descriptive;
+    use Readonly;
+
+    my $cp = Dn::Common->new();
+
+    Readonly my $TRUE  => 1;
+    Readonly my $FALSE => 0;
+    Readonly my $TITLE => 'XBindKeys';
+    Readonly my $ICON  => '@icons_dir@/dn-xbindkeys.png';
+    Readonly my $DELAY => 10;    # seconds
+
+    # debug
+    use Data::Dumper::Simple;    #                                     }}}1
+
+    # main()                                                           {{{1
+    #
+    # does:   main method
+    # params: nil
+    # prints: feedback
+    # return: n/a, dies on failure
+    method main () {
+        # process args
+        $self->_process_args();
+
+        # requires xbindkeys
+        if ( not $cp->tools_available('xbindkeys') ) { 
+            $self->_notify("$title is not available";);
+        }
+
+        # wait
+        $self->_notify("Waiting $DELAY seconds before starting $title");
+        sleep $DELAY;
+
+        # kill any running instances
+        my $pid = $cp->pid_command('xbindkeys');
+        if ($pid) {
+            my ( $success, $err ) = $cp->kill_process($pid);
+            if ( not $sucess ) {
+                $self->_notify('Unable to kill xbindkeys');
+                exit;
+            }
+        }
+        
+        # start xbindkeys as detached process
+        my @cmd = qw(xbindkeys &);
+        system @cmd;
+
+        return;
+    }
+
+    # _process_args                                                    {{{1
+    #
+    # does:   handle arguments
+    # params: nil
+    # prints: help if requested
+    # return: nil, exits after displaying help
+    method _process_args () {
+        my ($opt, $usage) = describe_options(
+            'dn-xbindkeys %o',
+            [ 'help|h', 'print usage message and exit' ],
+          );
+
+        print($usage->text), exit if $opt->help;
+    }
+
+    # _notify(@messages)                                               {{{1
+    #
+    # does:   display message in log and system notification
+    # params: @messages - messages to display [optional, no default]
+    # prints: nil, except error messages
+    # return: n/a, dies on failure
+    method _notify (@messages) {
+        for my $msg (@messages) {
+            $cp->logger($msg);
+            $cp->notify( $msg, title => $TITLE, icon => $ICON );
+        }
+    }    #                                                             }}}1
+
+}
+
+my $p = Dn::Internal->new->main;
+
+1;
+
+# POD                                                                  {{{1
+__END__
+
+=head1 NAME
+
+dn-xbindkeys - runs xbindkeys
+
+=head1 USAGE
+
+B<myscript param>
+
+B<myscript -h>
+
+=head1 OPTIONS
+
+=over
+
+=item B<-h>
+
+Display help and exit.
+
+=back
+
+=head1 DESCRIPTION
+
+For some reason a direct symlink to xbindkeys in an autostart directory does not work correctly. It starts and is visible in the process list, but does not respond to configured keys.
+
+This script waits 10 seconds, kills any running xbindkeys processes and starts xbindkeys as a detached process.
+ 
+Feedback is provided in system notifications and the system log (on debian systems that is usually F</var/log/messages>.
+
+=head2 Debian package
+
+The debian package C<dn-xbindkeys> provides a dn-xbindkeys desktop file as well as a system xbindkeys configuration. The installation process creates a local xbindkeys configuration file (F<~/.xbindkeysrc>) for each user by symlinking to the system configuration file. (Note that xbindkeys only looks for local configuration files.) The installation process also adds a symlink to the desktop file to each user's autostart directory (F<~/.config/autostart>).
+
+=head1 DEPENDENCIES
+
+=head2 Perl modules
+
+=over
+
+=item Dn::Common
+
+=item Function::Parameters
+
+=item Getopt::Long::Descriptive
+
+=item Moo
+
+=item namespace::clean
+
+=item Readonly
+
+=item strictures
+
+=item version
+
+=back
+
+=head2 Executables
+
+=over
+
+=item xbindkeys
+
+=back
+
+=head1 CONFIGURATION AND ENVIRONMENT
+
+=head2 Autostart
+
+As noted earlier, the debian dn-xbindkeys package ensures a (symlink to a) dn-xbindkeys desktop file is placed in each user's autostart directory (F<~/.config/autostart>).
+
+=head2 Configuration files
+
+As noted earlier, the debian dn-xbindkeys package ensures a local xbindkeys configuration file (F<~/.xbindkeysrc>) is created for each user by symlinking to a system-wide configuration file.
+
+=head1 BUGS AND LIMITATIONS
+
+Please report any bugs to the author.
+
+=head1 AUTHOR
+
+David Nebauer E<lt>davidnebauer@hotkey.net.auE<gt>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright (c) 2015 David Nebauer E<lt>davidnebauer@hotkey.net.auE<gt>
+
+This script is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
+# vim:fdm=marker
+

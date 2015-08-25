@@ -1,0 +1,204 @@
+#!/bin/bash
+# postinst script for dn-xbindkeys
+#
+# see: dh_installdeb(1)
+set -e
+
+. /usr/share/debconf/confmodule  # use debconf
+
+
+# VARIABLES
+
+declare pkg="dn-xbindkeys"
+declare conf_dir="/etc/${pkg}"
+declare apps_dir="/usr/share/applications"
+declare launcher_filename="${pkg}.desktop"
+declare launcher_global="${apps_dir}/${launcher_filename}"
+declare conf_global="${conf_dir}/${pkg}rc"
+declare conf_local=".xbindkeysrc"
+declare conf_backup_root="${conf_local}.dpkg-old"
+
+# How do we handle existing configuration files?
+# - stores result in 'RET' variable
+db_get ${pkg}/handle-existing-configs
+declare backup_config="${RET}"  # 'Backup' or 'Overwrite'
+
+# Check whether or not to install xbindkeys desktop launcher
+# - stores result in 'RET' variable
+db_get ${pkg}/install-launcher
+declare add_launcher="${RET}"
+
+
+# PROCEDURES
+
+# Add local XBindKeys configuration file link to each user home directory
+#  params: nil
+#  prints: feedback
+#  return: nil
+function addConfig () {
+	local user="" user_found="" conf_local_fp="" backup="" msg="" msg2=""
+    local -a users
+    users="$( listUsers )" user_found="no"
+    for user in ${users} ; do
+        if [ "${user_found}" = 'no' ] ; then
+            echo "Installing local XBindKeys configuration files:"
+            user_found='yes'
+        fi
+        echo -n "  User '${user}': "
+        conf_local_fp="/home/${user}/${conf_local}"
+        # backup old config file if required
+        if [ -f "${conf_local_fp}" \
+                -a "${backup_config}" = "Backup" ] ; then
+            backup="$( backupName "${user}" )"
+            mv "${conf_local_fp}" "${backup}" &>/dev/null || true
+            msg2=" (existing file backed up to '${backup}'"
+        fi
+        # remove old config file/link if still present
+        if [ -e "${conf_local_fp}" ] ; then
+            rm -f "${conf_local_fp}" &>/dev/null || true
+        fi
+        # add new link
+        set +e
+        ln -s "${conf_global}" "${conf_local_fp}" &>/dev/null
+        if [ ${?} -eq 0 ] ; then
+            msg="added config file link${msg2}"
+        else
+            msg="ERROR -- unable to add config file link${msg2}"
+        fi
+        set -e
+        echo "${msg}"
+	done  # for dir in ${dirs} ...
+}
+# Add launcher links to desktop autostart directories
+#  params: nil
+#  prints: feedback
+#  return: nil
+function addLauncher () {
+    local user="" user_found="no" autostart_dir="" autostart_file=""
+    local -a users
+    users="$( listUsers )"
+    for user in ${users} ; do
+        if [ "${user_found}" = 'no' ] ; then
+            echo "Installing local XBindKeys desktop (launcher) files:"
+            user_found='yes'
+        fi
+        echo -n "  User '${user}': "
+        # create autostart directory if required
+        autostart_dir="/home/${user}/.config/autostart"
+        [ -d "${autostart_dir}" ] || mkdir -p "${autostart_dir}"
+        # remove old desktop file if still present
+        autostart_file="${autostart_dir}/${launcher_filename}"
+        if [ -e "${autostart_file}" ] ; then
+            rm -f "${autostart_file}" &>/dev/null || true
+        fi
+        # add new link
+        set +e
+        ln -s "${launcher_global}" "${autostart_file}" &>/dev/null
+        if [ ${?} -eq 0 ] ; then
+            msg="added launcher file link"
+        else
+            msg="ERROR -- unable to add config file link"
+        fi
+        set -e
+        echo "${msg}"
+    done
+}
+# Remove launcher links from desktop autostart directories
+#  params: nil
+#  prints: feedback
+#  return: nil
+function removeLauncher () {
+	local user="" user_found="no" link="" links=""
+	links="$( find /home/*/.config/autostart -name ${launcher_filename} )"
+	for link in ${links} ; do
+		user="$( echo "${link}" | cut -d '/' -f 3 )"
+		if [ -n "${user}" ] ; then  # sanity check
+			if [ "${user_found}" = 'no' ] ; then
+				echo "Removing XBindKeys desktop launcher scripts:"
+				user_found='yes'
+			fi
+			echo -n "  User '${user}': "
+			rm "${link}" &>/dev/null
+			if [ -e "${link}" ] ; then  # failed to remove!
+				echo "ERROR -- unable to remove launcher"
+			else  # successfully removed!
+				echo "removed launcher"
+			fi  # if [ -e "${link}" ] ...
+		fi  # if [ -n "${user}" ] ...
+	done  # for link in ${links} ...
+}
+# List users with accounts and a home directory
+#   params: nil
+#   prints: space-delimited list of users
+#   return: list of user names
+function listUsers () {
+    for user in $( while read line ; do echo "${line}" | \
+            cut -d: -f1 ; done < /etc/passwd ) ; do \
+        dir -1 /home/ | grep "\b${user}\b" | \
+        grep -v "lost+found" | tr -s '\n' ; \
+    done
+}
+# Determine backup name for config file
+#  params: 1 - user name
+#  prints: backup file name
+#  return: nil
+function backupName () {
+	local user="${1}" subnumber=1
+	local conf_backup_base="/home/${user}/${conf_backup_root}"
+	local conf_backup="${conf_backup_base}"
+	while [ ! -f "${conf_backup}" ] ; do
+		conf_backup="${conf_backup_base}-${subnumber}"
+		subnumber=$(( subnumber + 1 ))
+	done
+	echo "${conf_backup}"
+}
+
+
+# MAIN
+
+# Handle package events
+case "${1}" in
+	
+'install'|'upgrade'|'configure' )
+    
+    # 2015-08: note that postinst is now being called
+    #          with the 'install' option
+
+	# add config symlinks
+	addConfig
+	# add local desktop autostart launcher symlinks if requested
+	case "${add_launcher}" in
+		'Yes' ) addLauncher;;
+	esac
+    ;;
+
+'reconfigure' )
+	# add config symlinks
+	addConfig
+	# add or remove local desktop autostart launcher symlinks as requested
+	case "${add_launcher}" in
+		'Yes' ) addLauncher;;
+		'No'  ) removeLauncher;;
+	esac
+    ;;
+
+'abort-upgrade' | 'abort-remove' | 'abort-deconfigure' )
+    ;;
+
+* )
+	if test -z "${1}" ; then
+		echo "postinst called with no argument" >&2
+	else
+		echo "postinst called with unknown argument '${1}'" >&2
+	fi
+	exit 1
+    ;;
+	
+esac
+
+# dh_installdeb will replace this with shell code automatically
+# generated by other debhelper scripts.
+
+#DEBHELPER#
+
+exit 0
