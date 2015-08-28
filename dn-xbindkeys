@@ -10,7 +10,7 @@ use namespace::clean;    #                                             }}}1
 
     package Dn::Internal;
 
-    use Moo;                                                         # {{{1
+    use Moo;             # {{{1
     use strictures 2;
     use namespace::clean -except => [ '_options_data', '_options_config' ];
     use Dn::Common;
@@ -24,7 +24,7 @@ use namespace::clean;    #                                             }}}1
     Readonly my $FALSE => 0;
     Readonly my $TITLE => 'XBindKeys';
     Readonly my $ICON  => '@icons_dir@/dn-xbindkeys.png';
-    Readonly my $DELAY => 10;    # seconds
+    Readonly my $DELAY => 10;                               # seconds
 
     # debug
     use Data::Dumper::Simple;    #                                     }}}1
@@ -36,33 +36,24 @@ use namespace::clean;    #                                             }}}1
     # prints: feedback
     # return: n/a, dies on failure
     method main () {
+
         # process args
         $self->_process_args();
 
         # requires xbindkeys
-        if ( not $cp->tools_available('xbindkeys') ) { 
-            $self->_notify("$title is not available";);
+        if ( not $cp->tools_available('xbindkeys') ) {
+            $self->_notify("$TITLE is not available");
         }
 
         # wait
-        $self->_notify("Waiting $DELAY seconds before starting $title");
+        $self->_notify("Waiting $DELAY seconds before starting $TITLE");
         sleep $DELAY;
 
         # kill any running instances
-        my $pid = $cp->pid_command('xbindkeys');
-        if ($pid) {
-            my ( $success, $err ) = $cp->kill_process($pid);
-            if ( not $sucess ) {
-                $self->_notify('Unable to kill xbindkeys');
-                exit;
-            }
-        }
-        
-        # start xbindkeys as detached process
-        my @cmd = qw(xbindkeys &);
-        system @cmd;
+        $self->_kill_running_xbindkeys();
 
-        return;
+        # start xbindkeys as detached process
+        exec 'xbindkeys' or die "Unable to start xbindkeys\n";
     }
 
     # _process_args                                                    {{{1
@@ -72,12 +63,12 @@ use namespace::clean;    #                                             }}}1
     # prints: help if requested
     # return: nil, exits after displaying help
     method _process_args () {
-        my ($opt, $usage) = describe_options(
+        my ( $opt, $usage ) = describe_options(
             'dn-xbindkeys %o',
             [ 'help|h', 'print usage message and exit' ],
-          );
+        );
 
-        print($usage->text), exit if $opt->help;
+        print( $usage->text ), exit if $opt->help;
     }
 
     # _notify(@messages)                                               {{{1
@@ -89,9 +80,34 @@ use namespace::clean;    #                                             }}}1
     method _notify (@messages) {
         for my $msg (@messages) {
             $cp->logger($msg);
-            $cp->notify( $msg, title => $TITLE, icon => $ICON );
+            $cp->notify_sys( $msg, title => $TITLE, icon => $ICON );
         }
-    }    #                                                             }}}1
+    }
+
+    # _kill_running_xbindkeys()                                        {{{1
+    #
+    # does:   kill any running instance of xbindkeys
+    # params: nil
+    # prints: warnings if multiple processes detected
+    # return: n/a, dies on failure
+    method _kill_running_xbindkeys () {
+
+        my @pids = $cp->process_ids(qr[^xbindkeys\z], silent => $TRUE);
+        if ( scalar @pids > 1 ) {    # multiple xbindkeys processes
+            my $pid_list = join q{, }, @pids;
+            $self->_notify("Multiple xbindkeys processes: $pid_list");
+            exit;
+        }
+        if (@pids) {                 # must be a single xbindkeys process
+            my $pid = $pids[0];
+            my ( $success, $err ) = $cp->kill_process($pid);
+            if ( not $success ) {
+                $self->_notify('Unable to kill xbindkeys');
+                exit;
+            }
+        }
+        return;
+    } #                                                                }}}1
 
 }
 
