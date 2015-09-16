@@ -1,12 +1,11 @@
 [Desktop Entry]
+Name=XBindkeys DN
 Type=Application
 TryExec=dn-xbindkeys
 Exec=dn-xbindkeys
 Icon=dn-xbindkeys
 Terminal=false
-Categories=Qt;KDE;System;TerminalEmulator;
+Categories=Utility;Accessibility
 Actions=NewWindow;
 X-DBUS-StartupType=Unique
 StartupNotify=true
-X-KDE-AuthorizeAction=shell_access
-
