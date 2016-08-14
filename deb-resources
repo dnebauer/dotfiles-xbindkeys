@@ -21,7 +21,7 @@ package-name dn-xbindkeys
 # Package version
 # Version number for package.
 # Required. One only.
-version 2.1
+version 2.2
  
 # Script and binary files
 # Executable files to be packaged.

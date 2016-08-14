@@ -88,8 +88,9 @@
 
 # Run dn-use-internet
 # [F2 aka "E-Mail"]
+# *** Not currently working: mod2 + F2
 "/usr/bin/dn-use-internet"
-  mod2 + XF86Mail
+  mod2 + F2
 
 # Open amarok music player
 # ["Alt-F9"]
@@ -108,8 +109,9 @@
 
 # Open Tellico (collection manager)
 # [F3 aka "Search"]
+# *** Not currently working: mod2 + F3
 "tellico"
-  mod2 + XF86Search
+  mod2 + F3
 
 # Run dn-keep-awake
 # [Ctrl-Alt-w]
@@ -121,6 +123,11 @@
 # [Alt-F10]
 "dn-show-time"
   mod1 + F10
+
+# Open web browser
+# [Ctrl-Alt-b]
+"qutebrowser"
+  control+alt+mod2 + b
 
 ##################################
 # End of xbindkeys configuration #
