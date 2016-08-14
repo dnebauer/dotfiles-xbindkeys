@@ -105,7 +105,7 @@
 # Open TuxCards (notebook)
 # [F1 aka "Home"]
 "tuxcards"
-  mod2 + XF86HomePage
+  mod2 + F1
 
 # Open Tellico (collection manager)
 # [F3 aka "Search"]
