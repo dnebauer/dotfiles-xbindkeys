@@ -88,7 +88,6 @@
 
 # Run dn-use-internet
 # [F2 aka "E-Mail"]
-# *** Not currently working: mod2 + F2
 "/usr/bin/dn-use-internet"
   mod2 + F2
 
@@ -109,7 +108,6 @@
 
 # Open Tellico (collection manager)
 # [F3 aka "Search"]
-# *** Not currently working: mod2 + F3
 "tellico"
   mod2 + F3
 
