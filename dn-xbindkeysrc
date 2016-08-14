@@ -87,9 +87,10 @@
   control+alt + v
 
 # Run dn-use-internet
-# [F2 aka "E-Mail"]
+# [Ctrl-Alt-i]
+# stop using F2 aka "E-Mail" (mod2 + F2) because it prevents using F2 in mc
 "/usr/bin/dn-use-internet"
-  mod2 + F2
+  control+alt+mod2 + i
 
 # Open amarok music player
 # ["Alt-F9"]
