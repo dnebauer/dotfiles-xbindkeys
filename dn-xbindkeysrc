@@ -92,15 +92,15 @@
 ##"/usr/bin/dn-use-internet"
 ##  control+alt+mod2 + i
 
-# Open amarok music player
-# ["Alt-F9"]
-"amarok"
-  mod1 + F9
+### Open amarok music player
+### ["Alt-F9"]
+##"amarok"
+##  mod1 + F9
 
-# Display details of current Amarok track
-# ["Alt-F8"]
-"dn-amarok-track"
-  mod1 + F8
+### Display details of current Amarok track
+### ["Alt-F8"]
+##"dn-amarok-track"
+##  mod1 + F8
 
 # Open TuxCards (notebook)
 # [F1 aka "Home"]
