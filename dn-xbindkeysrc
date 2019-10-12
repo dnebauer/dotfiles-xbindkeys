@@ -56,10 +56,10 @@
 
 # HOTKEYS
 
-# Open aMule
-# [Ctrl-Alt-m]
-"amule"
-  control+alt + m
+### Open aMule
+### [Ctrl-Alt-m]
+##"amule"
+##  control+alt + m
 
 # Internet radio
 # [Shift-F4]
