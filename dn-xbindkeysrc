@@ -112,11 +112,11 @@
 "tellico"
   mod2 + F3
 
-# Run dn-keep-awake
-# [Ctrl-Alt-w]
-#  control+alt+mod2 + k
-"dn-keep-awake"
-  control+alt + w
+### Run dn-keep-awake
+### [Ctrl-Alt-w]
+###  control+alt+mod2 + k
+##"dn-keep-awake"
+##  control+alt + w
 
 # Show time
 # [Alt-F10]
