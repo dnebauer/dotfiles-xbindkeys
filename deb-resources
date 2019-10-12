@@ -21,7 +21,7 @@ package-name dn-xbindkeys
 # Package version
 # Version number for package.
 # Required. One only.
-version 2.4
+version 2.5
  
 # Script and binary files
 # Executable files to be packaged.
@@ -144,10 +144,8 @@ control-summary Provides useful bindings for XBindKeys
 # will be included in the package 'control' file. This,
 # in turn, is displayed by many package managers.
 # Required. Multiple allowed.
-control-description Provides usefule bindings for XBindKeys
-control-description Bindings are provided for launching: IceWeasel, Konsole
-control-description (user and superuser), GVim, aMule, Amarok, Tuxcards,
-control-description dn-keep-awake, dn-use-internet and dn-radio.
+control-description Provides useful bindings for XBindKeys - display them
+control-description with Ctrl-Alt-s.
 control-description .
 control-description The bindings are provided by a configuration file placed
 control-description in each user's home directory.
@@ -162,30 +160,53 @@ control-description starts XBindKeys automatically when the desktop starts.
  
 ### Perl modules
  
-#   perl, Moo
+##  perl, Moo
 depends-on perl (>= 5.20.2-6)
  
-#   Dn::Common
+##  Dn::Common
 depends-on libdn-common-perl (>= 1.0.2-1)
  
-#   Function::Parameters
+##  Function::Parameters
 depends-on libfunction-parameters-perl (>= 1.0603-1)
  
-#   Getopt::Long::Descriptive
+##  Getopt::Long::Descriptive
 depends-on libgetopt-long-descriptive-perl (>= 0.099-1)
  
-#   namespace::clean
+##  namespace::clean
 depends-on libnamespace-clean-perl (>= 0.25-1)
  
-#   Readonly
+##  Readonly
 depends-on libreadonly-perl (>= 2.000-2)
  
-#   strictures
+##  strictures
 depends-on libstrictures-perl (>= 2.000001-2)
  
-#   version
+##  version
 depends-on libversion-perl (>= 1:0.9912-1)
- 
+
+### Executables
+
+##  dn-show-time
+depends-on dn-show-time (>= 0.3-1)
+
+##  gvim
+depends-on vim-gtk (>= 2:8.1.0875-5)
+
+##  konsole
+depends-on konsole (>= 4:19.08.1-2)
+
+##  pactl
+depends-on pulseaudio-utils (>= 13.0-2)
+
+##  qutebrowser
+depends-on qutebrowser (>= 1.8.1-1)
+
+##  tellico
+depends-on tellico (>= 3.2.1-2)
+
+##  xbindkeys, xbindkeys_show
+depends-on xbindkeys (>= 1.8.6-1+b1)
+
 # Copyright year
 # Year of copyright
 # Required. One only.
