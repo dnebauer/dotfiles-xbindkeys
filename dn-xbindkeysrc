@@ -56,16 +56,6 @@
 
 # HOTKEYS
 
-### Open aMule
-### [Ctrl-Alt-m]
-##"amule"
-##  control+alt + m
-
-### Internet radio
-### [Shift-F4]
-##"perl -- @bin_dir@/dn-radio"
-##  shift+mod2 + F4
-
 # Show all commands
 # [Ctrl-Alt-s]
 "xbindkeys_show" 
@@ -86,37 +76,10 @@
 "gvim"
   control+alt + v
 
-### Run dn-use-internet
-### [Ctrl-Alt-i]
-### stop using F2 aka "E-Mail" (mod2 + F2) because it prevents using F2 in mc
-##"/usr/bin/dn-use-internet"
-##  control+alt+mod2 + i
-
-### Open amarok music player
-### ["Alt-F9"]
-##"amarok"
-##  mod1 + F9
-
-### Display details of current Amarok track
-### ["Alt-F8"]
-##"dn-amarok-track"
-##  mod1 + F8
-
-### Open TuxCards (notebook)
-### [F1 aka "Home"]
-##"tuxcards"
-##  mod2 + F1
-
 # Open Tellico (collection manager)
 # [F3 aka "Search"]
 "tellico"
   mod2 + F3
-
-### Run dn-keep-awake
-### [Ctrl-Alt-w]
-###  control+alt+mod2 + k
-##"dn-keep-awake"
-##  control+alt + w
 
 # Show time
 # [Alt-F10]
@@ -134,31 +97,68 @@
 
 # ARCHIVED HOTKEYS
 
-# Open web browser
-# [Ctrl-Alt-w]
+## Run dn-keep-awake
+## [Ctrl-Alt-w]
+##  control+alt+mod2 + k
+#"dn-keep-awake"
+#  control+alt + w
+
+## Run dn-use-internet
+## [Ctrl-Alt-i]
+## stop using F2 aka "E-Mail" (mod2 + F2) because it prevents using F2 in mc
+#"/usr/bin/dn-use-internet"
+#  control+alt+mod2 + i
+
+## Open amarok music player
+## ["Alt-F9"]
+#"amarok"
+#  mod1 + F9
+
+## Display details of current Amarok track
+## ["Alt-F8"]
+#"dn-amarok-track"
+#  mod1 + F8
+
+## Open TuxCards (notebook)
+## [F1 aka "Home"]
+#"tuxcards"
+#  mod2 + F1
+
+## Open aMule
+## [Ctrl-Alt-m]
+#"amule"
+#  control+alt + m
+
+## Internet radio
+## [Shift-F4]
+#"perl -- @bin_dir@/dn-radio"
+#  shift+mod2 + F4
+
+## Open web browser
+## [Ctrl-Alt-w]
 #"iceweasel-chroot"
 #  control+alt + w
 
-# Run wammu (gui version of gammu)
-# [Ctrl-Alt-g]
+## Run wammu (gui version of gammu)
+## [Ctrl-Alt-g]
 #"wammu"
 #  control+alt + g
 
-# Run dn-drive-ops
-# ["Alt-F8"]
+## Run dn-drive-ops
+## ["Alt-F8"]
 #"konsole --title Drive\ Operations --icon /usr/share/icons/dn-drive-ops.png -e /usr/bin/dn-drive-ops"
 #  mod1 + F8
 
-# Run dn-schedule
-# ["Calculator"]
+## Run dn-schedule
+## ["Calculator"]
 #"konsole --title Scheduler --icon /usr/share/dn-schedule/dn-schedule.png -e dn-schedule -c"
 #  m:0x10 + c:161
-# [Ctrl-Alt-c]
+## [Ctrl-Alt-c]
 #"konsole --title Scheduler --icon /usr/share/dn-schedule/dn-schedule.png -e dn-schedule -c"
 #  control+alt + c
 
-# gPodder
-# [Ctrl-Alt-p]
+## gPodder
+## [Ctrl-Alt-p]
 #"gpodder" 
 #  control+alt + p
 
