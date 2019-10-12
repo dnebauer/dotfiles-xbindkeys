@@ -3,45 +3,38 @@
 # xbindkeys configuration #
 ###########################
 #
-# Version: 1.8.2
+# Version: 1.8.6
 #
 # If you edit this file, do not forget to uncomment any lines
 # that you change.
 # The pound(#) symbol may be used anywhere for comments.
-#
+
 # To get the descriptor for an associated key or key combination,
 # you can use 'xbindkeys --key' or 'xbindkeys --multikey' and use
 # one of the two output lines in this file.
-#
+
 # The format of a command line is:
 #    "command to start"
 #       associated key
-#
-# To re-read configuration file, send a HUP signal to xbindkeys:
-#    killall -HUP xbindkeys
-# Change takes effect only after moving the mouse
-#
+
+# A list of keys is in /usr/include/X11/keysym.h and in
+# /usr/include/X11/keysymdef.h
+# The XK_ is not needed.
+
 # List of modifiers:
 #   Release, Control, Shift, Mod1 (Alt), Mod2 (NumLock),
 #   Mod3 (CapsLock), Mod4, Mod5 (Scroll).
 #
-# The release modifier is not a standard X modifier, but
-# you can use it if you want to catch release events
-# instead of press events
+# The Release modifier is not a standard X modifier, but you can
+# use it if you want to catch release events instead of press events
 #
-# By defaults, xbindkeys does not pay attention with the
-# modifiers NumLock, CapsLock and ScrollLock.
-# Uncomment the lines below if you want to pay attention
-# to them.
+# By defaults, xbindkeys does not pay attention to the
+# NumLock, CapsLock and ScrollLock modifiers.
+# Uncomment the lines below if you want to pay attention to them.
 #keystate_numlock = enable
 #keystate_capslock = enable
 #keystate_scrolllock= enable
-#
-# For special keys (such as Favorites, Media, Volume Down,
-# etc.) use:
-# KDE System Settings > Computer Administration
-# > Input Actions
-#
+
 # When using konsole as a terminal in which to launch a
 # console utility, note the following:
 # --background-mode
@@ -53,6 +46,11 @@
 #   * unable to get this to work manually at all
 # --geometry
 #   * this option has been broken for years 
+
+# To re-read configuration file, send a HUP signal to xbindkeys:
+#    killall -HUP xbindkeys
+# Change takes effect only after moving the mouse
+
 
 # HOTKEYS
 
@@ -90,6 +88,16 @@
 # [Ctrl-Alt-b]
 "qutebrowser"
   control+alt+mod2 + b
+
+# Volume up
+# [XF86AudioRaiseVolume]
+"exec pactl set-sink-volume 0 +5%"
+  XF86AudioRaiseVolume
+
+# Volume down
+# [XF86AudioLowerVolume]
+"exec pactl set-sink-volume 0 -5%"
+  XF86AudioLowerVolume
 
 ##################################
 # End of xbindkeys configuration #
