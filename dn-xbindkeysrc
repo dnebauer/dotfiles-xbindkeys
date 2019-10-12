@@ -61,10 +61,10 @@
 ##"amule"
 ##  control+alt + m
 
-# Internet radio
-# [Shift-F4]
-"perl -- @bin_dir@/dn-radio"
-  shift+mod2 + F4
+### Internet radio
+### [Shift-F4]
+##"perl -- @bin_dir@/dn-radio"
+##  shift+mod2 + F4
 
 # Show all commands
 # [Ctrl-Alt-s]
