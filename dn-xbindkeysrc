@@ -105,6 +105,16 @@
 
 # ARCHIVED HOTKEYS
 
+## Volume up
+## [XF86AudioRaiseVolume]
+#"amixer -q set Master 5%+ unmute"
+#  XF86AudioRaiseVolume
+
+## Volume down
+## [XF86AudioLowerVolume]
+#"amixer -q set Master 5%- unmute"
+#  XF86AudioLowerVolume
+
 ## Run dn-keep-awake
 ## [Ctrl-Alt-w]
 ##  control+alt+mod2 + k
