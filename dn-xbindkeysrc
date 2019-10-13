@@ -105,6 +105,11 @@
 
 # ARCHIVED HOTKEYS
 
+## Screen shot
+## [Print Screen]
+#"scrot '%Y-%m-%d–%s_$wx$h_scrot.png' -e 'mv $f ~/screenshots/'"
+#  Print
+
 ## Volume up
 ## [XF86AudioRaiseVolume]
 #"amixer -q set Master 5%+ unmute"
