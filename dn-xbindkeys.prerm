@@ -51,31 +51,6 @@ function removeConfig () {
         fi
 	done  # for dir in ${dirs} ...
 }
-# Remove launcher links from desktop autostart directories
-#  params: nil
-#  prints: feedback
-#  return: nil
-function removeLauncher () {
-	local link="" links="" user="" user_found="" launcher_filename=""
-	local user_found="no" launcher_filename="dn-xbindkeys.desktop"
-	links="$( find /home/*/.config/autostart -name ${launcher_filename} )"
-	for link in ${links} ; do
-		user="$( echo "${link}" | cut -d '/' -f 3 )"
-		if [ -n "${user}" ] ; then  # sanity check
-			if [ "${user_found}" = 'no' ] ; then
-				echo "Removing XBindKeys desktop launcher scripts:"
-				user_found='yes'
-			fi
-			echo -n "  User '${user}': "
-			rm "${link}" &>/dev/null
-			if [ -e "${link}" ] ; then  # failed to remove!
-				echo "ERROR -- unable to remove launcher"
-			else  # successfully removed!
-				echo "removed launcher"
-			fi  # if [ -e "${link}" ] ...
-		fi  # if [ -n "${user}" ] ...
-	done  # for link in ${links} ...
-}
 # List users with accounts and a home directory
 #   params: nil
 #   prints: space-delimited list of users
@@ -96,20 +71,14 @@ case "$1" in
 
 'remove'|'upgrade'|'deconfigure' )
 
-	# remove all config symlinks and any launcher symlinks
+	# remove all config symlinks
 	removeConfig
-	case "${add_launcher}" in
-		'Yes' ) removeLauncher;;
-	esac
     ;;
 
 'failed-upgrade')
 
-	# remove all config symlinks and any launcher symlinks
+	# remove all config symlinks
 	removeConfig
-	case "${add_launcher}" in
-		'Yes' ) removeLauncher;;
-	esac
     ;;
 
 * )
