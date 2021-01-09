@@ -74,8 +74,13 @@
 "gvim"
   control+alt + v
 
+# Select value to send to clipboard
+# [F1]
+"dn-load-clipboard"
+  mod2 + F1
+
 # Open Tellico (collection manager)
-# [F3 aka "Search"]
+# [F3]
 "tellico"
   mod2 + F3
 

@@ -194,8 +194,12 @@
 ;; [Ctrl-Alt-v]
 (xbindkey '(control alt v) "gvim")
 
+;; Select value to send to clipboard
+;; [F1]
+(xbindkey '(F1) "dn-load-clipboard")
+
 ;; Open Tellico (collection manager)
-;; [F3 aka "Search"]
+;; [F3]
 (xbindkey '(F3) "tellico")
 
 ;; Show time
